@@ -1,0 +1,37 @@
+{
+    "tracking-id": "",
+    "package": {
+      "sender": {
+        "name":"",
+        "address":""
+      },
+      "recipient": {
+        "name": "",
+        "address": ""
+      },
+      "content": "",
+      "created-datetime": "",
+      "origin-carrier": "",
+      "constraints": [
+        {
+          "type": "temperature",
+          "min-value": 1,
+          "max-value": 10,
+          "value-unit": "F | C"
+        }
+      ]
+    },
+    "routes": [
+        {
+            "origin": "",
+            "destination": "",
+            "conveyor-type": "flight",
+            "conveyor-id": "123",
+            "origin": "ORD",
+            "destination": "DEN",
+            "etd": "",
+            "eta":""
+        }
+    ]
+
+}

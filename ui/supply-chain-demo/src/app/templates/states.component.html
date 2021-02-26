@@ -1,0 +1,120 @@
+
+    <div>
+    <div style="padding:20px; margin:20px">
+      <form nz-form [nzLayout]="'inline'" [formGroup]="getTrackingInfoForm" (ngSubmit)="getTrackingInfo()">
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please input package tracking number!">
+              <input size="50" formControlName="trackingId" nz-input placeholder="tracking number" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control>
+            <nz-form-control>
+              <button nz-button nzType="primary" [disabled]="!getTrackingInfoForm.valid">Track Package</button>
+            </nz-form-control>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+    <div style="padding:20px; margin:20px">
+      <nz-timeline>
+        <ng-container *ngFor="let item of data; let indexOfelement = index;">
+          <nz-timeline-item *ngIf="item.icon ==='home'" nzPosition="left" [nzDot]="dotTemplateHome">
+            <nz-card style="width: 50%;" [nzTitle]="item.date">
+              <nz-card-tab>
+                <nz-tabset nzSize="large" (nzSelectChange)="getCardContent($event, item)">
+                  <nz-tab nzTitle="Description"></nz-tab>
+                  <nz-tab nzTitle="Carrier"> </nz-tab>
+                  <nz-tab *ngIf="item.hasContainers" nzTitle="Containers"> </nz-tab>
+                </nz-tabset>
+              </nz-card-tab>
+              {{item.display}}
+            </nz-card>
+          </nz-timeline-item>
+
+          <nz-timeline-item *ngIf="item.icon ==='transfer'" nzPosition="left" [nzDot]="dotTemplateTransfer">
+            <nz-card style="width: 50%;" [nzTitle]="item.date">
+              <nz-card-tab>
+                <nz-tabset nzSize="large" (nzSelectChange)="getCardContent($event, item)">
+                  <nz-tab nzTitle="Description"></nz-tab>
+                  <nz-tab nzTitle="Carrier"> </nz-tab>
+                </nz-tabset>
+              </nz-card-tab>
+              {{item.display}}
+            </nz-card>
+          </nz-timeline-item>
+
+          <nz-timeline-item *ngIf="item.icon ==='normal'" nzPosition="left" [nzDot]="dotTemplateNormal">
+            <nz-card style="width: 50%;" [nzTitle]="item.date">
+              <nz-card-tab>
+                <nz-tabset nzSize="large" (nzSelectChange)="getCardContent($event, item)">
+                  <nz-tab nzTitle="Description"></nz-tab>
+                  <nz-tab nzTitle="Carrier"> </nz-tab>
+                  <nz-tab *ngIf="item.hasContainers" nzTitle="Containers"> </nz-tab>
+                </nz-tabset>
+              </nz-card-tab>
+              {{item.display}}
+            </nz-card>
+          </nz-timeline-item>
+ 
+          <nz-timeline-item *ngIf="item.icon ==='alert'" nzColor="red" nzPosition="left" [nzDot]="dotTemplateAlert">
+            <nz-card style="width: 50%;">
+              <nz-collapse>
+                <nz-collapse-panel nzHeader="Violation" nzActive="false">
+                    <apx-chart
+                    [series]="item.series"
+                    [chart]="item.chart"
+                    [xaxis]="item.xaxis"
+                    [yaxis]="item.yaxis"
+                    [plotOptions]="item.options"
+                    [tooltip]="item.tooltip"
+                  ></apx-chart>
+                </nz-collapse-panel>
+              </nz-collapse>
+            </nz-card>
+          </nz-timeline-item>
+
+
+          <nz-timeline-item *ngIf="item.icon==='transfer1'" [nzDot]="dotTemplateTransfer">
+            <p *ngTemplateOutlet="itemDisplay;context: item"></p>
+            <nz-collapse>
+              <nz-collapse-panel nzHeader="See transaction detail" nzActive="false" (nzActiveChange)="getTransferTxns(item)">
+                <div>
+                  <ngx-json-viewer [json]="txfDetail.get(item.txn)" style="height: 400px; overflow-y: auto"></ngx-json-viewer>
+                </div>
+              </nz-collapse-panel>
+            </nz-collapse>
+          </nz-timeline-item>
+        </ng-container>
+      </nz-timeline>
+
+      <ng-template #dotTemplateAlert>
+        <i nz-icon nzType="warning" style="font-size: 32px;"></i>
+      </ng-template>
+      <ng-template #dotTemplateAlertStop>
+        <i nz-icon nzType="check-circle" nzTheme="twotone"></i>
+      </ng-template>
+      <ng-template #dotTemplateNormal>
+        <i nz-icon nzType="down-circle" nzTheme="outline" style="font-size: 32px;"></i>
+      </ng-template>
+
+      <ng-template #dotTemplateHome><i nz-icon nzType="home" nzTheme="twotone" style="font-size: 32px;"></i></ng-template>
+      <ng-template #dotTemplateTransfer><i nz-icon nzType="interaction" nzTheme="twotone" style="font-size: 32px;"></i></ng-template>
+      
+     
+
+      <ng-template let-item=item  #itemDisplay>
+        <nz-card style="width: 100%;" [nzTitle]="item.date" #card>
+          <nz-card-tab>
+            <nz-tabset nzSize="large">
+              <nz-tab nzTitle="Description"></nz-tab>
+              <nz-tab nzTitle="Carrier"></nz-tab>
+            </nz-tabset>
+          </nz-card-tab>
+           {{item.event}}
+        </nz-card>
+       </ng-template>
+    </div>
+  </div>
+   
+  

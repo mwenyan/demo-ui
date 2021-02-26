@@ -1,0 +1,67 @@
+
+    <div>
+    <div style="padding:20px; margin:20px">
+      <form nz-form [nzLayout]="'inline'" [formGroup]="getTrackingInfoForm" (ngSubmit)="getTrackingInfo()">
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please input package tracking number!">
+              <input size="50" formControlName="trackingId" nz-input placeholder="tracking number" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control>
+            <nz-form-control>
+              <button nz-button nzType="primary" [disabled]="!getTrackingInfoForm.valid">Track Package</button>
+            </nz-form-control>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+    <div style="padding:20px; margin:20px">
+      <nz-timeline>
+        <ng-container *ngFor="let item of data">
+          <nz-timeline-item *ngIf="item.color==='red'" nzColor="red" [nzDot]="dotTemplateAlert">
+            <p *ngTemplateOutlet="itemDisplay;context: item"></p>
+            <p>  
+              <nz-collapse>
+                <nz-collapse-panel *ngFor="let panel of panels" [nzHeader]="panel.name" [nzActive]="panel.active" (nzActiveChange)="loadJSONChart()">
+                  <div style="display: block" style="text-align:center">
+                      <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis" [title]="chartOptions.title" #chart>
+                      </apx-chart>
+                  </div>
+                </nz-collapse-panel>
+              </nz-collapse>
+            </p>
+          </nz-timeline-item>
+          <nz-timeline-item *ngIf="item.color==='blue'" [nzDot]="dotTemplateNormal">
+            <p *ngTemplateOutlet="itemDisplay;context: item"></p>
+          </nz-timeline-item>
+        </ng-container>
+      </nz-timeline>
+
+
+      <ng-template #dotTemplateAlert>
+        <i nz-icon nzType="exclamation-circle" nzTheme="outline" style="font-size: 16px;"></i>
+      </ng-template>
+      <ng-template #dotTemplateNormal>
+        <i nz-icon nzType="down-circle" nzTheme="outline" style="font-size: 16px;"></i>
+      </ng-template>
+      <ng-template let-date=date let-time=time let-description=description let-location=location let-source=source #itemDisplay>
+        <p><b>{{date}}</b></p>
+            <p>
+              <nz-space>
+                <nz-space-item>{{time}}</nz-space-item><nz-space-item>{{description}}</nz-space-item>
+              </nz-space>
+              <br/>
+              <nz-space>
+                <nz-space-item>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</nz-space-item><nz-space-item><i> by {{source}}</i></nz-space-item>
+              </nz-space>
+              <br/>
+              <nz-space>
+                <nz-space-item>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</nz-space-item><nz-space-item><i>{{location}}</i></nz-space-item>
+              </nz-space>
+          </p>
+       </ng-template>
+    </div>
+  </div>
+   
+  

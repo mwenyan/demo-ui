@@ -1,0 +1,225 @@
+<div>
+    <mat-horizontal-stepper [linear]="true" #stepper>
+        <mat-step [stepControl]="pkgSenderFormGroup" label="Sender Info">
+            <form [formGroup]="pkgSenderFormGroup">
+                <div>
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Name" formControlName="senderName" required>
+                </mat-form-field>
+               </div>
+               <div>
+                <mat-form-field style="width:500px" >
+                    <mat-label>Address</mat-label>
+                    <input matInput placeholder="Address" formControlName="senderAddr" required>
+                </mat-form-field>
+               </div>
+               <div>
+                <mat-form-field>
+                    <mat-label>City</mat-label>
+                    <mat-select matNativeControl formControlName="senderCity" (selectionChange)="onCityChange(true, $event)" required >
+                        <mat-option value="Atlanta">Atlanta</mat-option>
+                        <mat-option value="Chicago">Chicago</mat-option>
+                        <mat-option value="Denver">Denver</mat-option>
+                        <mat-option value="Houston">Houston</mat-option>
+                        <mat-option value="Los Angeles">Los Angeles</mat-option>
+                        <mat-option value="New York">New York</mat-option>
+                        <mat-option value="Seattle">Seattle</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>State</mat-label>
+                    <mat-select matNativeControl formControlName="senderState" required>
+                        <mat-option value="CA">CA</mat-option>
+                        <mat-option value="CO">CO</mat-option>
+                        <mat-option value="GA">GA</mat-option>
+                        <mat-option value="IL">IL</mat-option>
+                        <mat-option value="NY">NY</mat-option>
+                        <mat-option value="TX">TX</mat-option>
+                        <mat-option value="WA">WA</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Zipcode</mat-label>
+                    <input matInput placeholder="Zipcode" formControlName="senderZip" required>
+                </mat-form-field>
+               </div>
+               <div><button color="primary" mat-raised-button matStepperNext>Next</button></div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="pkgReceiverFormGroup" label="Recipient Info">
+            <form [formGroup]="pkgReceiverFormGroup">
+               <div>
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Name" formControlName="receiverName" required>
+                </mat-form-field>
+                </div> 
+                <div>
+                <mat-form-field style="width:500px">
+                    <mat-label>Address</mat-label>
+                    <input matInput placeholder="Address" formControlName="receiverAddr" required>
+                </mat-form-field>
+                </div>
+                <div>
+                <mat-form-field>
+                    <mat-label>City</mat-label>
+                    <mat-select matNativeControl formControlName="receiverCity" (selectionChange)="onCityChange(false, $event)" required>
+                        <mat-option value="Atlanta">Atlanta</mat-option>
+                        <mat-option value="Chicago">Chicago</mat-option>
+                        <mat-option value="Denver">Denver</mat-option>
+                        <mat-option value="Houston">Houston</mat-option>
+                        <mat-option value="Los Angeles">Los Angeles</mat-option>
+                        <mat-option value="New York">New York</mat-option>
+                        <mat-option value="Seattle">Seattle</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>State</mat-label>
+                    <mat-select matNativeControl formControlName="receiverState" required>
+                        <mat-option value="CA">CA</mat-option>
+                        <mat-option value="CO">CO</mat-option>
+                        <mat-option value="GA">GA</mat-option>
+                        <mat-option value="IL">IL</mat-option>
+                        <mat-option value="NY">NY</mat-option>
+                        <mat-option value="TX">TX</mat-option>
+                        <mat-option value="WA">WA</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Zipcode</mat-label>
+                    <input matInput placeholder="Zipcode" formControlName="receiverZip" required>
+                </mat-form-field>
+                </div>
+                <div>
+                    <button color="primary" mat-raised-button matStepperPrevious>Back</button>&nbsp; &nbsp;
+                    <button color="primary" mat-raised-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+    
+        <mat-step [stepControl]="pkgContentFormGroup" label="Package Detail">
+            <form [formGroup]="pkgContentFormGroup">
+                <div>
+                    <p>Package Measurement:</p>
+                    <mat-form-field>
+                        <mat-label>Height (inches)</mat-label>
+                        <input type="number" matInput placeholder="height" formControlName="height" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Width (inches)</mat-label>
+                        <input type="number" matInput placeholder="width" formControlName="width" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Depth (inches)</mat-label>
+                        <input type="number" matInput placeholder="depth" formControlName="depth" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Weight (lbs)</mat-label>
+                        <input type="number"  matInput placeholder="weight" formControlName="weight" required>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Content</mat-label>
+                        <mat-select matNativeControl formControlName="content" required>
+                            <mat-option value="standard">Standard</mat-option>
+                            <mat-option value="PfizerVaccine">Pfizer Vaccine</mat-option>
+                            <mat-option value="ModernaVaccine">Moderna Vaccine</mat-option>
+                            <mat-option value="FrozenMeat">Frozen Meat</mat-option>
+                            <mat-option value="Fruit">Fruit</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field style="width:500px">
+                        <mat-label>Content Description</mat-label>
+                        <input matInput placeholder="Package Content" formControlName="contentDesc">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Producer</mat-label>
+                        <input matInput placeholder="content producer" formControlName="producer">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Count</mat-label>
+                        <input type='number' matInput placeholder="count" formControlName="count" required>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Start Lot Number</mat-label>
+                        <input type='number' matInput placeholder="start lot" formControlName="startlot">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>End Lot Number</mat-label>
+                        <input type='number' matInput placeholder="end lot" formControlName="endlot">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Dry Ice Weight (lbs)</mat-label>
+                        <input type='number' matInput placeholder="weight" formControlName="dryice">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <p></p>
+                    <button color="primary" mat-raised-button matStepperPrevious>Back</button>&nbsp; &nbsp;
+                    <button color="primary" mat-raised-button [disabled]="!pkgContentFormGroup.valid" (click)='createPkg(stepper)'>Create</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step  [stepControl]="qrFormGroup" label="Ship It">
+            <form [formGroup]="qrFormGroup">
+                <div>
+                    <mat-form-field style="width:500px">
+                        <mat-label>Tracking ID</mat-label>
+                        <input matInput formControlName="trackingId" readonly>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field style="width:500px">
+                        <mat-label>Shipping Company</mat-label>
+                        <input matInput formControlName="shippingCompany" readonly>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field style="width:500px">
+                        <mat-label>Estimated Pickup Time</mat-label>
+                        <input type="datetime" matInput formControlName="pickupTime" readonly>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field style="width:500px">
+                        <mat-label>Estimated Delivery Time</mat-label>
+                        <input type="datetime" matInput formControlName="deliveryTime" readonly>
+                    </mat-form-field>
+                </div>
+
+            </form>
+            <div>
+                <p></p>
+                <button color="primary" mat-raised-button matStepperPrevious>Back</button>&nbsp; &nbsp; 
+                <button color="primary" mat-raised-button (click)='shipIt(stepper)'>Ship It</button>
+            </div>
+        </mat-step>
+        <mat-step  [stepControl]="doneFormGroup" label="Done">
+            <form [formGroup]="doneFormGroup">
+                <div>
+                    <p>Running simulator....</p>
+                    <ng-template #indicatorTemplate><i nz-icon nzType="loading"></i></ng-template>
+                    <nz-spin nzSimple [nzIndicator]="indicatorTemplate" [nzSpinning]="doneFormGroup.value.spinning"> </nz-spin>
+                    <p>{{doneFormGroup.value.status}}</p>
+                </div> 
+            </form>
+        </mat-step>
+    
+    </mat-horizontal-stepper>
+</div>
+
+

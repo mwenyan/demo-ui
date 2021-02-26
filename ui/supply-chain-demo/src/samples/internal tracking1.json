@@ -1,0 +1,220 @@
+{
+  "tracking-id": "12345",
+  "package": {
+    "sender": {
+      "name":"john smith",
+      "address":"33 aberdeen st, windermere, fl 34786"
+    },
+    "recipient": {
+      "name": "kevin smith",
+      "address": "33 aberdeen st, chicago, il 60089"
+    },
+    "content": "PfVaccine",
+    "created-datetime": "2021-02-20T10:00:00 -5:00",
+    "shipper": "NLS",
+    "constraints": [
+      {
+        "type": "temperature",
+        "min-value": 1,
+        "max-value": 10,
+        "value-unit": "F"
+      }
+    ]
+  },
+  "logistic-events":
+  [
+    {
+      "event": "created",
+      "event-datetime": "2020-02-11T10:00:00 -05:00",
+      "location": "ORD",
+      "handler": "john smith",
+      "event-device-id": "",
+      "event-source":{
+        "id": "12345",
+        "type": "package"
+      }
+    },
+    {
+      "event": "induction",
+      "event-datetime": "2020-02-11T10:00:00 -05:00",
+      "location": "ORD",
+      "handler": "emp123",
+      "event-device-id": "event-device-id id",
+      "event-source":{
+        "id": "12345",
+        "type": "package"
+      }
+    },
+    {
+      "event": "stow",
+      "event-datetime": "2020-02-11T10:00:00 -05:00",
+      "location": "ORD",
+      "handler": "emp123",
+      "event-device-id": "event-device-id id",
+      "event-source":{
+        "id": "12345",
+        "type": "package"
+      },
+      "event-target": {
+        "id": "dddd",
+        "type": "ULD"
+      }
+    },
+    {
+      "event": "loaded",
+      "event-datetime": "2020-02-11T10:00:00 -05:00",
+      "location": "ORD",
+      "handler": "12345",
+      "event-device-id": "event-device-id id",
+      "event-source":{
+        "id": "dddd",
+        "type": "ULD"
+      },
+      "event-target": {
+        "type": "flight",
+        "id": "123",
+        "origin": "ORD",
+        "destination": "DEN",
+        "etd": "",
+        "eta":""
+      }
+    },
+    {
+      "event": "departed",
+      "event-datetime": "2020-02-11T10:00:00 -05:00",
+      "location": "DEN",
+      "handler": "123",
+      "event-device-id": "event-device-id id",
+      "event-source": {
+        "type": "flight",
+        "id": "123"
+      }
+    },
+    {
+      "event": "arrived",
+      "event-datetime": "2020-02-11T10:00:00 -05:00",
+      "location": "DEN",
+      "handler": "123",
+      "event-device-id": "",
+      "event-source": {
+        "type": "flight",
+        "id": "123"
+      }
+    },
+    {
+      "event": "offloaded",
+      "event-datetime": "2020-02-11T10:00:00 -05:00",
+      "location": "DEN",
+      "handler": "123",
+      "event-device-id": "event-device-id id",
+      "event-source": {
+        "type": "ULD",
+        "id": "123"
+      },
+      "event-target": {
+        "type": "flight",
+        "id": "123",
+        "origin": "ORD",
+        "destination": "DEN"
+      }
+    },
+    {
+      "event": "sorting",
+      "event-datetime": "2020-02-11T10:00:00 -05:00",
+      "location": "DEN",
+      "handler": "12345",
+      "event-device-id": "event-device-id id",
+      "event-source": {
+        "type": "package",
+        "id": "12345"
+      }
+    },
+    {
+      "event": "stow",
+      "event-datetime": "2020-02-11T10:00:00 -05:00",
+      "location": "DEN",
+      "handler": "12345",
+      "event-device-id": "event-device-id id",
+      "event-source": {
+        "type": "ULD",
+        "id": "123"
+      },
+      "event-target": {
+        "container-id": "tttt",
+        "container-type": "ULD"
+      }
+    },
+    {
+      "event": "loaded",
+      "event-datetime": "2020-02-11T10:00:00 -05:00",
+      "location": "DEN",
+      "handler": "12345",
+      "event-device-id": "event-device-id id",
+      "event-source": {
+        "type": "ULD",
+        "id": "123"
+      },
+      "event-target": {
+        "conveyor-type": "truck",
+        "conveyor-id": "123",
+        "origin": "DEN",
+        "destination": "DEN",
+        "etd": "",
+        "eta":""
+      }
+    },
+    {
+      "event": "departed",
+      "event-datetime": "2020-02-11T10:00:00 -05:00",
+      "location": "DEN",
+      "handler": "12345",
+      "event-device-id": "event-device-id id",
+      "event-source": {
+        "conveyor-type": "truck",
+        "conveyor-id": "123",
+        "origin": "NLS DEN",
+        "destination": "SLS DEN",
+        "adt": ""
+      }
+    },
+    {
+      "event": "arrived",
+      "event-datetime": "2020-02-11T10:00:00 -05:00",
+      "location": "DEN",
+      "handler": "12345",
+      "event-device-id": "event-device-id id",
+      "event-source": {
+        "type": "truck",
+        "id": "123"
+      }
+    },
+    {
+      "event": "transferred",
+      "event-datetime": "2020-02-11T10:00:00 -05:00",
+      "location": "DEN",
+      "handler-type": "container",
+      "handler-id": "12345",
+      "event-device-id": "event-device-id id",
+      "event-source": {
+        "type": "package",
+        "id": "12345"
+      },
+      "event-target": {
+        "type": "shipper",
+        "id": "SLS"
+      }
+    }
+    
+  ],
+  "constraint-violation-events": [
+    {
+      "event": "",
+      "event-datetime": "2020-02-11T10:00:00 -05:00",
+      "event-device": "",
+      "longitude": "",
+      "latitude" : "",
+      "value": 12,
+      "value-unit": "F"
+    }
+  ]
+}
