@@ -401,12 +401,16 @@ func randomThresholdViolation(periodStart, periodEnd time.Time, minValue, maxVal
 	endSecond := periodEnd.Unix()
 
 	var violation *Measurement
-	violationPeriod := (endSecond - startSecond) / 100
+	violationPeriod := int64(rand.Float64() * float64(endSecond-startSecond) / 10.0)
 	if rand.Float64() < violationRate && violationPeriod > 0 {
 		violationStart := startSecond + int64(rand.Float64()*float64(endSecond-startSecond))
+		violationEnd := violationStart + violationPeriod
+		if violationEnd > endSecond {
+			violationEnd = endSecond
+		}
 		violation = &Measurement{
 			PeriodStart: time.Unix(violationStart, 0),
-			PeriodEnd:   time.Unix(violationStart+violationPeriod, 0),
+			PeriodEnd:   time.Unix(violationEnd, 0),
 			InViolation: true,
 		}
 		violation.MinValue, violation.MaxValue = randomMeasurementRange(maxValue, 2*maxValue-minValue)
@@ -634,12 +638,18 @@ func postToBlockchain(user, service string, content []byte, timeout int) ([]byte
 
 	response, err := client.Do(request)
 	if err != nil {
+		if response == nil {
+			return nil, "Error response", err
+		}
 		return nil, response.Status, err
 	}
 	defer response.Body.Close()
 
 	data, err := ioutil.ReadAll(response.Body)
 	if err != nil {
+		if response == nil {
+			return nil, "Error response", err
+		}
 		return nil, response.Status, err
 	}
 	return data, response.Status, nil
