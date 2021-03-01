@@ -16,8 +16,8 @@ export type ChartOptions = {
 
 @Component({
   selector: 'app-tracker',
-  templateUrl: './tracker.component.html',
-  styleUrls: ['./tracker.component.scss']
+  templateUrl: '../templates/states.component.html',
+  styleUrls: ['../templates/states.component.scss']
 })
 export class TrackerComponent implements OnInit{
   getTrackingInfoForm!: FormGroup;

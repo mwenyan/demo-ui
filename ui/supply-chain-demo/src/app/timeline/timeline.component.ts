@@ -1,52 +1,31 @@
 import { OnInit, AfterViewInit, Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CollectionViewer, DataSource, SelectionChange, SelectionModel } from '@angular/cdk/collections';
-import { FlatTreeControl, TreeControl } from '@angular/cdk/tree';
-import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 
-import { BehaviorSubject, merge, Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
 import { BlockchainService } from '../blockchain.service';
 
 import { DatePipe } from '@angular/common';
 import { NzTabChangeEvent } from 'ng-zorro-antd/tabs';
 
 
-interface FlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
-}
-interface TreeNode {
-  name: string;
-  disabled?: boolean;
-  children?: TreeNode[];
-}
-
-
 @Component({
-  selector: 'app-carrier',
-  templateUrl: './states.component.html',
-  styleUrls: ['./states.component.scss']
+  selector: 'app-timeline',
+  templateUrl: './timeline.component.html',
+  styleUrls: ['./timeline.component.scss']
 })
-export class CarrierComponent implements OnInit, AfterViewInit{
+export class TimelineComponent implements OnInit, AfterViewInit{
 
   getTrackingInfoForm!: FormGroup;
-  backendService!: BlockchainService;
-  formBuilder!: FormBuilder;
-  companyId!: string;
   trackingId!: string;
 
   // timeline tracking data
   data: any = [];
+  dataStatus = '';
 
   // transfer txn detail
   txfDetail = new Map();
 
 
-  constructor(fb: FormBuilder, svc: BlockchainService) {
-    this.formBuilder = fb;
-    this.backendService = svc;
+  constructor(private formBuilder: FormBuilder, private backendService: BlockchainService) {
   }
 
   ngOnInit(): void {
@@ -65,10 +44,16 @@ export class CarrierComponent implements OnInit, AfterViewInit{
     }
 
      this.trackingId = this.getTrackingInfoForm.value.trackingId;
-
-     this.backendService.getInternalTrackingInfo(this.trackingId, this.companyId).subscribe(
+     this.data = [];
+     this.dataStatus = '';
+     this.txfDetail.clear();
+     this.backendService.getTimeline(this.trackingId).subscribe(
       (val) => {
-        this.parseTimelineInfo(val);
+        if (Boolean(val)){
+          this.parseTimelineInfo(val);
+        } else {
+          this.dataStatus = 'Package is not found';
+        }
       },
       response => {
         console.log('error =', response);
@@ -99,7 +84,7 @@ export class CarrierComponent implements OnInit, AfterViewInit{
       // tslint:disable-next-line:no-non-null-assertion
       info.date = datepipe.transform(e.eventTime, 'EEEE, MMMM d, y, h:mm:ss a')!;
       info.location = e.location.substring(5);
-      info.event = e.eventType.toUpperCase();
+      info.event = e.eventType;
       info.icon = 'normal';
       switch (e.eventType){
         case 'pickup':
@@ -143,6 +128,7 @@ export class CarrierComponent implements OnInit, AfterViewInit{
         if (route.violated && !Boolean(route.used)){
           const violation = {
                               icon: 'alert',
+                              periods: [''],
                               chart: {height: 150, width: '100%', type: 'rangeBar', toolbar: {show: false}},
                               title: { text: 'Temperature Changes'},
                               series: [{name: '', data: [{}]}],
@@ -153,30 +139,39 @@ export class CarrierComponent implements OnInit, AfterViewInit{
                                 custom: ( { series, seriesIndex, dataPointIndex, w }: any) => {
                                         //const minmax = w.globals.seriesX[seriesIndex][dataPointIndex].split(':');
                                         const minmax = w.globals.seriesNames[seriesIndex].split(',')[dataPointIndex].split(':');
+                                        const datep: DatePipe = new DatePipe('en-US');
+                                        // tslint:disable-next-line:no-non-null-assertion
+                                        const start = datep.transform(new Date(w.globals.seriesRangeStart[seriesIndex][dataPointIndex]), 'EEEE, MMMM d, y, h:mm:ss a z');
+                                        const end = datep.transform(new Date(w.globals.seriesRangeEnd[seriesIndex][dataPointIndex]), 'EEEE, MMMM d, y, h:mm:ss a z');
+
                                         return (
                                           '<div style="margin:10px">' +
                                           '<span >' +
-                                          'minValue: ' + minmax[0] + '<br>' +
-                                          'maxValue: ' + minmax[1] + '<br>' +
-                                          'Start:    ' + new Date(w.globals.seriesRangeStart[seriesIndex][dataPointIndex]) + '<br>' +
-                                          'End:      ' + new Date(w.globals.seriesRangeEnd[seriesIndex][dataPointIndex]) +
+                                          'Temperature Range: ' + minmax[0] + ' to ' + minmax[1] + '<br>' +
+                                          'Start:    ' + start + '<br>' +
+                                          'End:      ' + end +
                                           '</span>' +
                                           '</div>'
                                         );
                                       },
                                 fixed: {
-                                        enabled: true,
+                                        enabled: false,
                                         position: 'topRight',
-                                        offsetX: 100,
-                                        offsetY: 100,
+                                        offsetX: 10,
+                                        offsetY: 10,
                                     },
                               }
                             };
           violation.series[0].data.pop();
           let name = '';
+          const violationPeriods: string[] = [];
           for (const m of route.measurements) {
             const color = m.violated ? '#ff0000' : '#008000';
-            const s = {x: 'status', //m.minValue + ':' +  m.maxValue,
+            if (m.violated) {
+              violationPeriods.push(m.periodStart);
+            }
+
+            const s = {x: 'status',
                        y: [new Date(m.periodStart).getTime(), new Date(m.periodEnd).getTime()],
                         fillColor: color
                       };
@@ -184,6 +179,7 @@ export class CarrierComponent implements OnInit, AfterViewInit{
             name = name + m.minValue + ':' + m.maxValue + ',';
           }
           violation.series[0].name = name;
+          violation.periods = violationPeriods;
           route.used = true;
           this.data.push(violation);
         }
@@ -199,17 +195,46 @@ export class CarrierComponent implements OnInit, AfterViewInit{
 
   ngAfterViewInit(): void {}
 
-  getTransferTxns(item: any): any {
-    let txn = this.txfDetail.get(item.txn);
+  getBlockchainTxn(uid: string, event: string): any {
+    const txn = this.txfDetail.get(uid + '-' + event);
 
     if (Boolean(txn)) {
       return txn;
     } else {
-      this.backendService.getTransferTxnDetail(this.trackingId, item.txn).subscribe(
+      this.backendService.getBlockchainTxn(uid, event).subscribe(
         (val) => {
-          txn = val;
-          this.txfDetail.set(item.txn, txn);
-          return txn;
+          this.txfDetail.set(uid + '-' + event, val);
+          return val;
+        },
+        response => {
+          console.log('error =', response);
+        },
+        () => {
+          console.log('completed');
+        }
+      );
+    }
+  }
+
+  getBlockchainViolation(item: any): any {
+    const txn = this.txfDetail.get(item.txn + '-' + item.periods[0]);
+
+    if (Boolean(txn)) {
+      return txn;
+    } else {
+      const data = { violations: [{}]};
+      this.backendService.getBlockchainViolation(this.trackingId, item.periods).subscribe(
+        (vals) => {
+          data.violations.pop();
+
+          // tslint:disable-next-line:forin
+          for (const i in item.periods){
+            const v = {'period-start': item.periods[i], transaction: vals[Number(i)]};
+            data.violations.push(v);
+          }
+
+          this.txfDetail.set(item.txn + '-' + item.periods[0], data);
+          return data;
         },
         response => {
           console.log('error =', response);
@@ -225,13 +250,15 @@ export class CarrierComponent implements OnInit, AfterViewInit{
     if (e.index === 0){
       item.display = item.description;
     } else if (e.index === 1){
-      if (item.event === 'TRANSFER'){
+      if (item.event === 'transfer'){
         item.display = item.source + ', ' + item.target;
       } else {
         item.display = item.source;
       }
     } else if (e.index === 2) {
       item.display = item.containers;
+    } else {
+      item.display = '';
     }
 
   }

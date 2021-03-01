@@ -15,6 +15,6 @@ export class HttpMockApiInterceptor implements HttpInterceptor {
         const handlers = mockEndpoints[request.method];
         currentMockEndpoint = handlers[request.url];
 
-        return currentMockEndpoint ? currentMockEndpoint.handler() : {};
+        return currentMockEndpoint ? currentMockEndpoint.handler() : next.handle(request);
     }
 }

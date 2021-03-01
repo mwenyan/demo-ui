@@ -10,7 +10,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { QRCodeModule } from 'angularx-qrcode';
 import {  MatSelectModule } from '@angular/material/select';
 
 const modules: any[] = [
@@ -24,7 +23,6 @@ const modules: any[] = [
   MatStepperModule,
   MatFormFieldModule,
   MatInputModule,
-  QRCodeModule,
   MatSelectModule,
 ];
 

@@ -15,10 +15,12 @@
           </nz-form-control>
         </nz-form-item>
       </form>
+      <br><p style="color:red">{{dataStatus}}</p>
     </div>
+  
     <div style="padding:20px; margin:20px">
       <nz-timeline>
-        <ng-container *ngFor="let item of data; let indexOfelement = index;">
+        <ng-container *ngFor="let item of data">
           <nz-timeline-item *ngIf="item.icon ==='home'" nzPosition="left" [nzDot]="dotTemplateHome">
             <nz-card style="width: 50%;" [nzTitle]="item.date">
               <nz-card-tab>
@@ -26,6 +28,11 @@
                   <nz-tab nzTitle="Description"></nz-tab>
                   <nz-tab nzTitle="Carrier"> </nz-tab>
                   <nz-tab *ngIf="item.hasContainers" nzTitle="Containers"> </nz-tab>
+                  <nz-tab nzTitle="Blockchain Transaction" (nzSelect)="getBlockchainTxn(item.txn, item.event)">
+                    <div>
+                      <ngx-json-viewer [json]="txfDetail.get(item.txn + '-' + item.event)" [expanded]="false" style="height: 400px; overflow-y: auto"></ngx-json-viewer>
+                    </div>
+                  </nz-tab>
                 </nz-tabset>
               </nz-card-tab>
               {{item.display}}
@@ -38,6 +45,16 @@
                 <nz-tabset nzSize="large" (nzSelectChange)="getCardContent($event, item)">
                   <nz-tab nzTitle="Description"></nz-tab>
                   <nz-tab nzTitle="Carrier"> </nz-tab>
+                  <nz-tab nzTitle="Transfer Blockchain Transaction" (nzSelect)="getBlockchainTxn(item.txn, 'transfer')">
+                    <div>
+                      <ngx-json-viewer [json]="txfDetail.get(item.txn + '-transfer')" [expanded]="false" style="height: 400px; overflow-y: auto"></ngx-json-viewer>
+                    </div>
+                  </nz-tab>
+                  <nz-tab nzTitle="TransferAck Blockchain Transaction" (nzSelect)="getBlockchainTxn(item.txn, 'transferAck')">
+                    <div>
+                      <ngx-json-viewer [json]="txfDetail.get(item.txn + '-transferAck')" [expanded]="false" style="height: 400px; overflow-y: auto"></ngx-json-viewer>
+                    </div>
+                  </nz-tab>
                 </nz-tabset>
               </nz-card-tab>
               {{item.display}}
@@ -58,32 +75,27 @@
           </nz-timeline-item>
  
           <nz-timeline-item *ngIf="item.icon ==='alert'" nzColor="red" nzPosition="left" [nzDot]="dotTemplateAlert">
-            <nz-card style="width: 50%;">
-              <nz-collapse>
-                <nz-collapse-panel nzHeader="Violation" nzActive="false">
+            <nz-card style="width: 50%;" [nzTitle]="item.date">
+              <nz-card-tab>
+                <nz-tabset nzSize="large">
+                  <nz-tab nzTitle="Violation">
                     <apx-chart
-                    [series]="item.series"
-                    [chart]="item.chart"
-                    [xaxis]="item.xaxis"
-                    [yaxis]="item.yaxis"
-                    [plotOptions]="item.options"
-                    [tooltip]="item.tooltip"
-                  ></apx-chart>
-                </nz-collapse-panel>
-              </nz-collapse>
+                        [series]="item.series"
+                        [chart]="item.chart"
+                        [xaxis]="item.xaxis"
+                        [yaxis]="item.yaxis"
+                        [plotOptions]="item.options"
+                        [tooltip]="item.tooltip"
+                      ></apx-chart>
+                  </nz-tab>
+                  <nz-tab nzTitle="Blockchain Transaction" (nzSelect)="getBlockchainViolation(item)">
+                    <div>
+                      <ngx-json-viewer [json]="txfDetail.get(item.txn + '-' + item.periods[0])" [expanded]="false" style="height: 400px; overflow-y: auto"></ngx-json-viewer>
+                    </div>
+                  </nz-tab>
+                </nz-tabset>
+                </nz-card-tab>
             </nz-card>
-          </nz-timeline-item>
-
-
-          <nz-timeline-item *ngIf="item.icon==='transfer1'" [nzDot]="dotTemplateTransfer">
-            <p *ngTemplateOutlet="itemDisplay;context: item"></p>
-            <nz-collapse>
-              <nz-collapse-panel nzHeader="See transaction detail" nzActive="false" (nzActiveChange)="getTransferTxns(item)">
-                <div>
-                  <ngx-json-viewer [json]="txfDetail.get(item.txn)" style="height: 400px; overflow-y: auto"></ngx-json-viewer>
-                </div>
-              </nz-collapse-panel>
-            </nz-collapse>
           </nz-timeline-item>
         </ng-container>
       </nz-timeline>

@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { TimelineComponent } from './timeline/timeline.component';
+import { SenderComponent } from './sender/sender.component';
+
 import { MaterialDesignModule } from '../material-design/material-design.module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SenderComponent } from './sender/sender.component';
-import { CarriernComponent } from './carriern/carriern.component';
-import { CarriersComponent } from './carriers/carriers.component';
 
 import { BlockchainService } from './blockchain.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -19,7 +19,6 @@ import { en_US } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
-import { TrackerComponent } from './tracker/tracker.component';
 
 import { NzTimelineModule } from 'ng-zorro-antd/timeline';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -29,14 +28,11 @@ import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 registerLocaleData(en);
 
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
-import { CarrierComponent } from './templates/carrier.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 const extraModules = environment.mockApi ? [MockModule] : [];
 
@@ -44,10 +40,7 @@ const extraModules = environment.mockApi ? [MockModule] : [];
   declarations: [
     AppComponent,
     SenderComponent,
-    CarriernComponent,
-    CarriersComponent,
-    TrackerComponent,
-    CarrierComponent,
+    TimelineComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,8 +56,6 @@ const extraModules = environment.mockApi ? [MockModule] : [];
     NzFormModule,
     NzCollapseModule,
     NgApexchartsModule,
-    NzTreeViewModule,
-    FontAwesomeModule,
     NgxJsonViewerModule,
     NzCardModule,
     NzTabsModule,

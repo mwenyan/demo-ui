@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Component, OnInit} from '@angular/core';
+import { FormBuilder, FormGroup} from '@angular/forms';
 import { MatHorizontalStepper } from '@angular/material/stepper';
 import { BlockchainService } from '../blockchain.service';
 import { DatePipe } from '@angular/common';
@@ -89,24 +89,22 @@ export class SenderComponent implements OnInit {
     data.sender = this.pkgSenderFormGroup.value.senderName;
     sender.street = this.pkgSenderFormGroup.value.senderAddr;
     sender.city = this.pkgSenderFormGroup.value.senderCity;
-    sender.state = this.pkgSenderFormGroup.value.senderState;
-    sender['state-province'] = this.pkgSenderFormGroup.value.senderZip;
+    sender['state-province'] = this.pkgSenderFormGroup.value.senderState;
+    sender['postal-code'] = this.pkgSenderFormGroup.value.senderZip;
     sender.country = 'USA';
     data.from = sender;
 
     data.recipient = this.pkgReceiverFormGroup.value.receiverName;
     receiver.street = this.pkgReceiverFormGroup.value.receiverAddr;
     receiver.city = this.pkgReceiverFormGroup.value.receiverCity;
-    receiver.state = this.pkgReceiverFormGroup.value.receiverState;
-    receiver['state-province'] = this.pkgReceiverFormGroup.value.receiverZip;
+    receiver['state-province'] = this.pkgReceiverFormGroup.value.receiverState;
+    receiver['postal-code'] = this.pkgReceiverFormGroup.value.receiverZip;
     receiver.country = 'USA';
     data.to = receiver;
 
     contentd.product = this.pkgContentFormGroup.value.content;
     if (contentd.product === 'standard'){
       data.handling = 'N';
-    } else if (contentd.product === 'PfizerVaccine' || contentd.product === 'ModernaVaccine') {
-      data.handling = 'D';
     } else {
       data.handling = 'P';
     }
@@ -148,14 +146,16 @@ export class SenderComponent implements OnInit {
     stepper.next();
     this.blockchainSvc.pickup(this.qrFormGroup.value.trackingId).subscribe(
       (val) => {
+        this.doneFormGroup.controls.status.setValue(val);
       },
       response => {
         console.log('error =', response);
+        this.doneFormGroup.controls.spinning.setValue(false);
+        this.doneFormGroup.controls.status.setValue(response);
       },
       () => {
         console.log('completed');
         this.doneFormGroup.controls.spinning.setValue(false);
-        this.doneFormGroup.controls.status.setValue('Done');
       }
     );
   }

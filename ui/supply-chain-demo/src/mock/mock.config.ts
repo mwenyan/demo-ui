@@ -3,21 +3,24 @@ import { of, Observable } from 'rxjs';
 
 export default {
     POST: {
-        'http://localhost/packages/create': {
-            handler: createPackage
+        'http://localhost/shipping/verifytransaction': {
+            handler: getBlockchainTxn
+        },
+        'http://localhost/shipping/verifytemperature': {
+            handler: getBlockchainTxn
         }
     },
     GET: {
-        'http://localhost/tracking/internal/nls/12345': {
+        'http://localhost/packages/timeline?uid=12345': {
             handler: getTimeline
-        },
-        'http://localhost/tracking/12345/txn1': {
-            handler: getTransferTxnDetail
         }
     },
     PUT: {
         'http://localhost/packages/pickup?uid=7bf55f10a8f2df21': {
             handler: pickup
+        },
+        'http://localhost/packages/create': {
+            handler: createPackage
         }
     }
 };
@@ -30,10 +33,10 @@ function pickup(): Observable<HttpResponse<any>> {
 function createPackage(): Observable<HttpResponse<any>> {
     return of(new HttpResponse({ status: 200, body:
         {
-            uid: '7bf55f10a8f2df21', 
-            handling: 'P', 
-            product: 'PfizerVaccine', 
-            carrier: 'NLS', 
+            uid: '7bf55f10a8f2df21',
+            handling: 'P',
+            product: 'PfizerVaccine',
+            carrier: 'NLS',
             created: '2021-02-23T12:02:32-05:00', 'estimated-pickup': '2021-02-24T11:07:00-05:00', 'estimated-delivery': '2021-02-25T11:44:00-08:00', sender: 'John', from: {street: 'E 16th St.', city: 'New York', 'state-province': 'NY', 'postal-code': '11212', country: 'USA', longitude: -74.1225, latitude: 40.6506}, recipient: 'Jane', to: {street: 'E Florence Ave', city: 'Los Angeles', 'state-province': 'CA', 'postal-code': '90001', country: 'USA', longitude: -118.5583, latitude: 33.8775}}
     }));
 }
@@ -52,367 +55,15 @@ function getTransferTxnDetail(): Observable<HttpResponse<any>> {
 }
 
 function getTimeline(): Observable<HttpResponse<any>> {
-    return of(new HttpResponse( {status: 200, body: 
-        {
-            uid: '7bf55f10a8f2df21',
-            timeline: [
-                {
-                    eventTime: '2021-02-24T16:08:20Z',
-                    eventType: 'pickup',
-                    location: 'E 16th St., New York, NY',
-                    latitude: 40.6506,
-                    longitude: -74.1225,
-                    route: 'NLS009'
-                },
-                {
-                    eventTime: '2021-02-24T19:59:49Z',
-                    eventType: 'arrive',
-                    location: 'NLS: JFK, New York, NY',
-                    latitude: 40.7128,
-                    longitude: -74.006,
-                    route: 'NLS009'
-                },
-                {
-                    eventTime: '2021-02-25T01:05:09Z',
-                    eventType: 'transfer',
-                    location: 'NLS: DEN, Denver, CO',
-                    latitude: 39.7392,
-                    longitude: -104.9903
-                },
-                {
-                    eventTime: '2021-02-25T01:05:39Z',
-                    eventType: 'transferAck',
-                    location: 'SLS: DEN, Denver, CO',
-                    latitude: 39.7392,
-                    longitude: -104.9903
-                },
-                {
-                    eventTime: '2021-02-25T07:02:12Z',
-                    eventType: 'depart',
-                    location: 'SLS: DEN, Denver, CO',
-                    latitude: 39.7392,
-                    longitude: -104.9903,
-                    route: 'SLS003'
-                },
-                {
-                    eventTime: '2021-02-25T09:00:39Z',
-                    eventType: 'arrive',
-                    location: 'SLS: LAX, Los Angeles, CA',
-                    latitude: 33.9416,
-                    longitude: -118.4085,
-                    route: 'SLS003'
-                },
-                {
-                    eventTime: '2021-02-25T16:03:56Z',
-                    eventType: 'depart',
-                    location: 'SLS: LAX, Los Angeles, CA',
-                    latitude: 33.9416,
-                    longitude: -118.4085,
-                    route: 'SLS004'
-                },
-                {
-                    eventTime: '2021-02-25T19:47:56Z',
-                    eventType: 'deliver',
-                    location: 'E Florence Ave, Los Angeles, CA',
-                    latitude: 33.8775,
-                    longitude: -118.5583,
-                    route: 'SLS004'
-                }
-            ],
-            routes: [
-                {
-                    routeNbr: 'NLS009',
-                    departureTime: '2021-02-24T13:01:20Z',
-                    from: 'NLS: JFK, New York, NY',
-                    arrivalTime: '2021-02-24T19:59:49Z',
-                    to: 'NLS: JFK, New York, NY',
-                    containers: 'NLS009000.NLS009001',
-                    violated: true,
-                    measurements: [
-                        {
-                            periodStart: '2021-02-24T16:00:58Z',
-                            periodEnd: '2021-02-24T16:08:20Z',
-                            minValue: -75.54,
-                            maxValue: -62.83,
-                            violated: false
-                        },
-                        {
-                            periodStart: '2021-02-24T16:08:20Z',
-                            periodEnd: '2021-02-24T16:10:58Z',
-                            minValue: -50.46,
-                            maxValue: -43.67,
-                            violated: true
-                        },
-                        {
-                            periodStart: '2021-02-24T16:10:58Z',
-                            periodEnd: '2021-02-24T19:59:49Z',
-                            minValue: -75.54,
-                            maxValue: -62.83,
-                            violated: false
-                        }
-                    ]
-                },
-                {
-                    routeNbr: 'SLS003',
-                    departureTime: '2021-02-25T07:02:12Z',
-                    from: 'SLS: DEN, Denver, CO',
-                    arrivalTime: '2021-02-25T09:00:39Z',
-                    to: 'SLS: LAX, Los Angeles, CA',
-                    containers: 'SLS002000.SLS002001.SLS002002',
-                    violated: false,
-                    measurements: [
-                        {
-                            periodStart: '2021-02-25T07:02:12Z',
-                            periodEnd: '2021-02-25T09:00:39Z',
-                            minValue: -68.6,
-                            maxValue: -67.17,
-                            violated: false
-                        }
-                    ]
-                },
-                {
-                    routeNbr: 'SLS004',
-                    departureTime: '2021-02-25T16:03:56Z',
-                    from: 'SLS: LAX, Los Angeles, CA',
-                    arrivalTime: '2021-02-25T22:57:58Z',
-                    to: 'SLS: LAX, Los Angeles, CA',
-                    containers: 'SLS004000.SLS004001',
-                    violated: false,
-                    measurements: [
-                        {
-                            periodStart: '2021-02-25T16:03:56Z',
-                            periodEnd: '2021-02-25T19:47:56Z',
-                            minValue: -66.33,
-                            maxValue: -60.17,
-                            violated: false
-                        }
-                    ]
-                }
-            ]
-        }
+    return of(new HttpResponse( {status: 200, body:
+        // tslint:disable-next-line:max-line-length
+      {uid: '183d5c1134c4e7f6', timeline: [{eventTime: '2021-02-27T15:55:55Z', eventType: 'pickup', location: 'E 16th St., New York, NY', latitude: 40.6246, longitude: -74.0822, route: 'NLS006'}, {eventTime: '2021-02-27T19:58:44Z', eventType: 'arrive', location: 'NLS: JFK, New York, NY', latitude: 40.7128, longitude: -74.006, route: 'NLS006'}, {eventTime: '2021-02-27T20:56:23Z', eventType: 'depart', location: 'NLS: JFK, New York, NY', latitude: 40.7128, longitude: -74.006, route: 'NLS004'}, {eventTime: '2021-02-28T01:05:33Z', eventType: 'arrive', location: 'NLS: DEN, Denver, CO', latitude: 39.7392, longitude: -104.9903, route: 'NLS004'}, {eventTime: '2021-02-28T01:05:33Z', eventType: 'transfer', location: 'NLS: DEN, Denver, CO', latitude: 39.7392, longitude: -104.9903}, {eventTime: '2021-02-28T01:06:03Z', eventType: 'transferAck', location: 'SLS: DEN, Denver, CO', latitude: 39.7392, longitude: -104.9903}, {eventTime: '2021-02-28T07:02:20Z', eventType: 'depart', location: 'SLS: DEN, Denver, CO', latitude: 39.7392, longitude: -104.9903, route: 'SLS006'}, {eventTime: '2021-02-28T08:56:24Z', eventType: 'arrive', location: 'SLS: LAX, Los Angeles, CA', latitude: 33.9416, longitude: -118.4085, route: 'SLS006'}, {eventTime: '2021-02-28T16:04:54Z', eventType: 'depart', location: 'SLS: LAX, Los Angeles, CA', latitude: 33.9416, longitude: -118.4085, route: 'SLS007'}, {eventTime: '2021-02-28T19:02:54Z', eventType: 'deliver', location: 'E Florence Ave, Los Angeles, CA', latitude: 33.8238, longitude: -118.3561, route: 'SLS007'}], routes: [{routeNbr: 'NLS006', departureTime: '2021-02-27T13:03:55Z', from: 'NLS: JFK, New York, NY', arrivalTime: '2021-02-27T19:58:44Z', to: 'NLS: JFK, New York, NY', containers: 'NLS006000.NLS006002', violated: false, measurements: [{periodStart: '2021-02-27T15:55:55Z', periodEnd: '2021-02-27T19:58:44Z', minValue: -67.01, maxValue: -63.1, violated: false}]}, {routeNbr: 'NLS004', departureTime: '2021-02-27T20:56:23Z', from: 'NLS: JFK, New York, NY', arrivalTime: '2021-02-28T01:05:33Z', to: 'NLS: DEN, Denver, CO', containers: 'NLS004000.NLS004007.NLS004008', violated: false, measurements: [{periodStart: '2021-02-27T20:56:23Z', periodEnd: '2021-02-28T01:05:33Z', minValue: -65.45, maxValue: -61.75, violated: false}]}, {routeNbr: 'SLS006', departureTime: '2021-02-28T07:02:20Z', from: 'SLS: DEN, Denver, CO', arrivalTime: '2021-02-28T08:56:24Z', to: 'SLS: LAX, Los Angeles, CA', containers: 'SLS005000.SLS005007.SLS005008', violated: true, measurements: [{periodStart: '2021-02-28T07:02:20Z', periodEnd: '2021-02-28T07:04:25Z', minValue: -71.91, maxValue: -65.46, violated: false}, {periodStart: '2021-02-28T07:04:25Z', periodEnd: '2021-02-28T07:27:22Z', minValue: -58.66, maxValue: -52.19, violated: true}, {periodStart: '2021-02-28T07:27:22Z', periodEnd: '2021-02-28T08:56:24Z', minValue: -74.01, maxValue: -62.12, violated: false}]}, {routeNbr: 'SLS007', departureTime: '2021-02-28T16:04:54Z', from: 'SLS: LAX, Los Angeles, CA', arrivalTime: '2021-02-28T23:03:37Z', to: 'SLS: LAX, Los Angeles, CA', containers: 'SLS007000.SLS007001', violated: false, measurements: [{periodStart: '2021-02-28T16:04:54Z', periodEnd: '2021-02-28T19:02:54Z', minValue: -78.43, maxValue: -69.28, violated: false}]}]}
     }));
 }
 
-function getTimeline2(): Observable<HttpResponse<any>> {
+function getBlockchainTxn(): Observable<HttpResponse<any>> {
     return of(new HttpResponse({ status: 200, body:
-        {
-            'tracking-id': '12345',
-            package: {
-              sender: {
-                name: 'john smith',
-                address: '33 aberdeen st, windermere, fl 34786'
-              },
-              recipient: {
-                name: 'kevin smith',
-                address: '33 aberdeen st, chicago, il 60089'
-              },
-              content: 'PfVaccine',
-              'created-datetime': '2021-02-20T10:00:00-5:00',
-              shipper: 'NLS',
-              constraints: [
-                {
-                  type: 'temperature',
-                  'min-value': 1,
-                  'max-value': 10,
-                  'value-unit': 'F'
-                }
-              ]
-            },
-            'logistic-events':
-            [
-              {
-                event: 'created',
-                'event-datetime': '2020-02-11T10:00:00-05:00',
-                location: 'ORD',
-                handler: 'john smith',
-                'event-device-id': '',
-                'event-source': {
-                  id: '12345',
-                  type: 'package'
-                }
-              },
-              {
-                event: 'induction',
-                'event-datetime': '2020-02-11T10:00:00-05:00',
-                location: 'ORD',
-                handler: 'emp123',
-                'event-device-id': 'event-device-id id',
-                'event-source': {
-                  id: '12345',
-                  type: 'package'
-                }
-              },
-              {
-                event: 'stow',
-                'event-datetime': '2020-02-11T10:00:00-05:00',
-                location: 'ORD',
-                handler: 'emp123',
-                'event-device-id': 'event-device-id id',
-                'event-source': {
-                  id: '12345',
-                  type: 'package'
-                },
-                'event-target': {
-                  id: 'dddd',
-                  type: 'ULD'
-                }
-              },
-              {
-                event: 'loaded',
-                'event-datetime': '2020-02-11T10:00:00-05:00',
-                location: 'ORD',
-                handler: '12345',
-                'event-device-id': 'event-device-id id',
-                'event-source': {
-                  id: 'dddd',
-                  type: 'ULD'
-                },
-                'event-target': {
-                  type: 'flight',
-                  id: '123',
-                  origin: 'ORD',
-                  destination: 'DEN',
-                  etd: '',
-                  eta: ''
-                }
-              },
-              {
-                event: 'departed',
-                'event-datetime': '2020-02-11T10:00:00-05:00',
-                location: 'DEN',
-                handler: '123',
-                'event-device-id': 'event-device-id id',
-                'event-source': {
-                  type: 'flight',
-                  id: '123'
-                }
-              },
-              {
-                event: 'arrived',
-                'event-datetime': '2020-02-11T10:00:00-05:00',
-                location: 'DEN',
-                handler: '123',
-                'event-device-id': '',
-                'event-source': {
-                  type: 'flight',
-                  id: '123'
-                }
-              },
-              {
-                event: 'offloaded',
-                'event-datetime': '2020-02-11T10:00:00-05:00',
-                location: 'DEN',
-                handler: '123',
-                'event-device-id': 'event-device-id id',
-                'event-source': {
-                  type: 'ULD',
-                  id: '123'
-                },
-                'event-target': {
-                  type: 'flight',
-                  id: '123',
-                  origin: 'ORD',
-                  destination: 'DEN'
-                }
-              },
-              {
-                event: 'sorting',
-                'event-datetime': '2020-02-11T10:00:00-05:00',
-                location: 'DEN',
-                handler: '12345',
-                'event-device-id': 'event-device-id id',
-                'event-source': {
-                  type: 'package',
-                  id: '12345'
-                }
-              },
-              {
-                event: 'stow',
-                'event-datetime': '2020-02-11T10:00:00-05:00',
-                location: 'DEN',
-                handler: '12345',
-                'event-device-id': 'event-device-id id',
-                'event-source': {
-                  type: 'ULD',
-                  id: '123'
-                },
-                'event-target': {
-                  id: 'tttt',
-                  type: 'ULD'
-                }
-              },
-              {
-                event: 'loaded',
-                'event-datetime': '2020-02-11T10:00:00-05:00',
-                location: 'DEN',
-                handler: '12345',
-                'event-device-id': 'event-device-id id',
-                'event-source': {
-                  type: 'ULD',
-                  id: '123'
-                },
-                'event-target': {
-                  type: 'truck',
-                  id: '123',
-                  origin: 'DEN',
-                  destination: 'DEN',
-                  etd: '',
-                  eta: ''
-                }
-              },
-              {
-                event: 'departed',
-                'event-datetime': '2020-02-11T10:00:00-05:00',
-                location: 'DEN',
-                handler: '12345',
-                'event-device-id': 'event-device-id id',
-                'event-source': {
-                  type: 'truck',
-                  id: '123',
-                  origin: 'NLS DEN',
-                  destination: 'SLS DEN',
-                  adt: ''
-                }
-              },
-              {
-                event: 'arrived',
-                'event-datetime': '2020-02-11T10:00:00-05:00',
-                location: 'DEN',
-                handler: '12345',
-                'event-device-id': 'event-device-id id',
-                'event-source': {
-                  type: 'truck',
-                  id: '123'
-                }
-              },
-              {
-                event: 'transferred',
-                'event-datetime': '2020-02-11T10:00:00-05:00',
-                location: 'DEN',
-                handler: '12345',
-                'event-device-id': 'event-device-id id',
-                'event-source': {
-                  type: 'package',
-                  id: '12345'
-                },
-                'event-target': {
-                  type: 'shipper',
-                  id: 'SLS'
-                },
-                'txn-id': 'txn1'
-              }
-            ],
-            'constraint-violation-events': [
-              {
-                event: '',
-                'event-datetime': '2020-02-11T10:00:00-05:00',
-                'event-device': '',
-                longitude: '',
-                latitude : '',
-                value: 12,
-                'value-unit': 'F'
-              }
-            ]
-          }
+      // tslint:disable-next-line:max-line-length
+      {uid: '183d5c1134c4e7f6', timeline: [{eventTime: '2021-02-27T15:55:55Z', eventType: 'pickup', location: 'E 16th St., New York, NY', latitude: 40.6246, longitude: -74.0822, route: 'NLS006'}, {eventTime: '2021-02-27T19:58:44Z', eventType: 'arrive', location: 'NLS: JFK, New York, NY', latitude: 40.7128, longitude: -74.006, route: 'NLS006'}, {eventTime: '2021-02-27T20:56:23Z', eventType: 'depart', location: 'NLS: JFK, New York, NY', latitude: 40.7128, longitude: -74.006, route: 'NLS004'}, {eventTime: '2021-02-28T01:05:33Z', eventType: 'arrive', location: 'NLS: DEN, Denver, CO', latitude: 39.7392, longitude: -104.9903, route: 'NLS004'}, {eventTime: '2021-02-28T01:05:33Z', eventType: 'transfer', location: 'NLS: DEN, Denver, CO', latitude: 39.7392, longitude: -104.9903}, {eventTime: '2021-02-28T01:06:03Z', eventType: 'transferAck', location: 'SLS: DEN, Denver, CO', latitude: 39.7392, longitude: -104.9903}, {eventTime: '2021-02-28T07:02:20Z', eventType: 'depart', location: 'SLS: DEN, Denver, CO', latitude: 39.7392, longitude: -104.9903, route: 'SLS006'}, {eventTime: '2021-02-28T08:56:24Z', eventType: 'arrive', location: 'SLS: LAX, Los Angeles, CA', latitude: 33.9416, longitude: -118.4085, route: 'SLS006'}, {eventTime: '2021-02-28T16:04:54Z', eventType: 'depart', location: 'SLS: LAX, Los Angeles, CA', latitude: 33.9416, longitude: -118.4085, route: 'SLS007'}, {eventTime: '2021-02-28T19:02:54Z', eventType: 'deliver', location: 'E Florence Ave, Los Angeles, CA', latitude: 33.8238, longitude: -118.3561, route: 'SLS007'}], routes: [{routeNbr: 'NLS006', departureTime: '2021-02-27T13:03:55Z', from: 'NLS: JFK, New York, NY', arrivalTime: '2021-02-27T19:58:44Z', to: 'NLS: JFK, New York, NY', containers: 'NLS006000.NLS006002', violated: false, measurements: [{periodStart: '2021-02-27T15:55:55Z', periodEnd: '2021-02-27T19:58:44Z', minValue: -67.01, maxValue: -63.1, violated: false}]}, {routeNbr: 'NLS004', departureTime: '2021-02-27T20:56:23Z', from: 'NLS: JFK, New York, NY', arrivalTime: '2021-02-28T01:05:33Z', to: 'NLS: DEN, Denver, CO', containers: 'NLS004000.NLS004007.NLS004008', violated: false, measurements: [{periodStart: '2021-02-27T20:56:23Z', periodEnd: '2021-02-28T01:05:33Z', minValue: -65.45, maxValue: -61.75, violated: false}]}, {routeNbr: 'SLS006', departureTime: '2021-02-28T07:02:20Z', from: 'SLS: DEN, Denver, CO', arrivalTime: '2021-02-28T08:56:24Z', to: 'SLS: LAX, Los Angeles, CA', containers: 'SLS005000.SLS005007.SLS005008', violated: true, measurements: [{periodStart: '2021-02-28T07:02:20Z', periodEnd: '2021-02-28T07:04:25Z', minValue: -71.91, maxValue: -65.46, violated: false}, {periodStart: '2021-02-28T07:04:25Z', periodEnd: '2021-02-28T07:27:22Z', minValue: -58.66, maxValue: -52.19, violated: true}, {periodStart: '2021-02-28T07:27:22Z', periodEnd: '2021-02-28T08:56:24Z', minValue: -74.01, maxValue: -62.12, violated: false}]}, {routeNbr: 'SLS007', departureTime: '2021-02-28T16:04:54Z', from: 'SLS: LAX, Los Angeles, CA', arrivalTime: '2021-02-28T23:03:37Z', to: 'SLS: LAX, Los Angeles, CA', containers: 'SLS007000.SLS007001', violated: false, measurements: [{periodStart: '2021-02-28T16:04:54Z', periodEnd: '2021-02-28T19:02:54Z', minValue: -78.43, maxValue: -69.28, violated: false}]}]}
     }));
 }
