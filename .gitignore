@@ -5,3 +5,4 @@ graphdb/data
 graphdb/log
 simulator/log
 lib
+graphdb/start.sh

@@ -1,0 +1,26 @@
+.map-container {
+    height: 80%;
+    width: 80%;
+    margin: 30px;
+  }
+  
+  .map-frame {
+    border: 2px solid black;
+    height: 100%;
+  }
+  
+  #map {
+    height: 100%;
+  }
+
+  .tooltip-demo {
+    font-size: 9px;
+    width: 12px;
+    height:12px;
+    padding: 1px;
+    background-color: white;
+ }
+ 
+ .leaflet-tooltip-left.tooltip-demo::before {
+     //border-left-color: transparent;
+   }

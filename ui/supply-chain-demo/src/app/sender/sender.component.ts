@@ -43,10 +43,10 @@ export class SenderComponent implements OnInit {
     });
 
     this.pkgContentFormGroup = this.fmBuilder.group({
-      height: '',
-      width: '',
-      depth: '',
-      weight: '',
+      height: 1,
+      width: 1,
+      depth: 1,
+      weight: 1,
       content: '',
       contentDesc: '',
       startlot: '',

@@ -1,10 +1,10 @@
 {
     "/packages": {
-      "target": "http://40.65.112.23:7980",
+      "target": "http://52.229.51.17:7980",
       "secure": false
     },
     "/shipping": {
-        "target": "http://40.65.112.23:7979",
+        "target": "http://52.229.51.17:7979",
         "secure": false
       }
 }

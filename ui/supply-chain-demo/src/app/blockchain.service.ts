@@ -7,11 +7,10 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
   providedIn: 'root'
 })
 export class BlockchainService {
-  // apiUrl = 'http://localhost:4200';
-  // blcApiUrl = 'http://localhost:4200';
-  blcApiUrl = 'http://40.65.112.23:7979';
-  apiUrl = 'http://40.65.112.23:7980';
-  headers = new HttpHeaders();
+  //apiUrl = 'http://localhost:4200';
+  //blcApiUrl = 'http://localhost:4200';
+  blcApiUrl = 'http://52.229.51.17:7979';
+  apiUrl = 'http://52.229.51.17:7980';
 
   constructor(private http: HttpClient) {
    }
@@ -20,7 +19,8 @@ export class BlockchainService {
   createPackage(data: any): Observable<any> {
     console.log('invoke create package....');
     const API_URL = `${this.apiUrl}/packages/create`;
-    return this.http.put(API_URL, data, {headers: this.headers})
+    const sheaders = new HttpHeaders().append('Content-Type', 'application/json');
+    return this.http.post(API_URL, data, {headers: sheaders})
       .pipe(
         catchError(this.error)
       );
@@ -30,7 +30,7 @@ export class BlockchainService {
   pickup(trackingId: string): Observable<any> {
     const API_URL = `${this.apiUrl}/packages/pickup?uid=${trackingId}`;
     const sheaders = new HttpHeaders().set('accept', '*/*');
-    return this.http.put(API_URL, {}, {headers: sheaders, responseType: 'text'})
+    return this.http.post(API_URL, {}, {headers: sheaders, responseType: 'text'})
       .pipe(
         catchError(this.error)
       );
@@ -39,7 +39,8 @@ export class BlockchainService {
   // get internal tracking information: shiper and tracking id
   getTimeline(trackingId: string): Observable<any> {
     const API_URL = `${this.apiUrl}/packages/timeline?uid=${trackingId}`;
-    return this.http.get(API_URL, {headers: this.headers})
+    const sheaders = new HttpHeaders();
+    return this.http.get(API_URL, {headers: sheaders})
       .pipe(
         catchError(this.error)
       );
@@ -55,7 +56,8 @@ export class BlockchainService {
       transactionType: txn
     };
 
-    const authHeaders = new HttpHeaders().append('Authorization', 'Basic ' + btoa('User1:'));
+    const authHeaders = new HttpHeaders().append('Authorization', 'Basic ' + btoa('User1:'))
+                            .append('Content-Type', 'application/json');
     return this.http.post(API_URL, data, {headers: authHeaders})
       .pipe(
         catchError(this.error)
@@ -74,7 +76,9 @@ export class BlockchainService {
         };
 
         const authHeaders = new HttpHeaders().append('Authorization', 'Basic ' + btoa('User1:'));
-        responses.push(this.http.post(API_URL, data, {headers: authHeaders, withCredentials: true})
+                                           //   .append('Content-Type', 'application/json')
+                                           //   .append('accept', 'application/json');
+        responses.push(this.http.post(API_URL, JSON.stringify(data), {headers: authHeaders})
                                 .pipe(
                                     catchError(this.error)
                                 )

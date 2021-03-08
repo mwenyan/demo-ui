@@ -4,5 +4,5 @@
         ".vscode{,/**}"
     ],
     "appService.deploySubpath": "dist/supply-chain-demo",
-    "appService.defaultWebAppToDeploy": "/subscriptions/4199aa10-7221-4547-aea2-ccc488438efb/resourceGroups/SupplychainDemo/providers/Microsoft.Web/sites/SupplyChainDemoApp"
+    "appService.defaultWebAppToDeploy": "/subscriptions/4199aa10-7221-4547-aea2-ccc488438efb/resourceGroups/SupplychainDemo/providers/Microsoft.Web/sites/supplychaindempwebapp"
 }

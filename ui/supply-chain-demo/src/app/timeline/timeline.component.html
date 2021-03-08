@@ -22,62 +22,71 @@
       <nz-timeline>
         <ng-container *ngFor="let item of data">
           <nz-timeline-item *ngIf="item.icon ==='home'" nzPosition="left" [nzDot]="dotTemplateHome">
-            <nz-card style="width: 50%;" [nzTitle]="item.date">
+            <nz-card style="width: 60%;" [nzTitle]="item.date">
               <nz-card-tab>
-                <nz-tabset nzSize="large" (nzSelectChange)="getCardContent($event, item)">
+                <nz-tabset nzSize="small" (nzSelectChange)="getCardContent($event, item)">
                   <nz-tab nzTitle="Description"></nz-tab>
                   <nz-tab nzTitle="Carrier"> </nz-tab>
                   <nz-tab *ngIf="item.hasContainers" nzTitle="Containers"> </nz-tab>
-                  <nz-tab nzTitle="Blockchain Transaction" (nzSelect)="getBlockchainTxn(item.txn, item.event)">
+                  <nz-tab nzTitle="Blockchain" (nzSelect)="getBlockchainTxn(item.txn, item.event)">
                     <div>
                       <ngx-json-viewer [json]="txfDetail.get(item.txn + '-' + item.event)" [expanded]="false" style="height: 400px; overflow-y: auto"></ngx-json-viewer>
                     </div>
                   </nz-tab>
+                  <nz-tab nzTitle="Certificate" (nzSelect)="getBlockchainTxn(item.txn, item.event)">
+                    <div style="white-space: pre-wrap;height: 250px; overflow-y: auto" *ngIf="txfDetail.get(item.txn + '-' + item.event) !== undefined" [innerHTML]="txfDetail.get(item.txn + '-' + item.event).transaction.message"></div>
+                  </nz-tab>
                 </nz-tabset>
               </nz-card-tab>
-              {{item.display}}
+              <p style="font-style: italic;">{{item.display}}</p>
             </nz-card>
           </nz-timeline-item>
 
           <nz-timeline-item *ngIf="item.icon ==='transfer'" nzPosition="left" [nzDot]="dotTemplateTransfer">
-            <nz-card style="width: 50%;" [nzTitle]="item.date">
+            <nz-card style="width: 60%;" [nzTitle]="item.date">
               <nz-card-tab>
-                <nz-tabset nzSize="large" (nzSelectChange)="getCardContent($event, item)">
+                <nz-tabset nzSize="small" (nzSelectChange)="getCardContent($event, item)">
                   <nz-tab nzTitle="Description"></nz-tab>
                   <nz-tab nzTitle="Carrier"> </nz-tab>
-                  <nz-tab nzTitle="Transfer Blockchain Transaction" (nzSelect)="getBlockchainTxn(item.txn, 'transfer')">
+                  <nz-tab nzTitle="Blockchain (transfer)" (nzSelect)="getBlockchainTxn(item.txn, 'transfer')">
                     <div>
-                      <ngx-json-viewer [json]="txfDetail.get(item.txn + '-transfer')" [expanded]="false" style="height: 400px; overflow-y: auto"></ngx-json-viewer>
+                      <ngx-json-viewer [json]="txfDetail.get(item.txn + '-transfer')" [expanded]="false"></ngx-json-viewer>
                     </div>
                   </nz-tab>
-                  <nz-tab nzTitle="TransferAck Blockchain Transaction" (nzSelect)="getBlockchainTxn(item.txn, 'transferAck')">
+                  <nz-tab nzTitle="Certificate (transfer)" (nzSelect)="getBlockchainTxn(item.txn, 'transfer')">
+                    <div style="white-space: pre-wrap; height: 250px; overflow-y: auto" *ngIf="txfDetail.get(item.txn + '-transfer') !== undefined" [innerHTML]="txfDetail.get(item.txn + '-transfer').transaction.message"></div>
+                  </nz-tab>
+                  <nz-tab nzTitle="Blockchain (transferAck)" (nzSelect)="getBlockchainTxn(item.txn, 'transferAck')">
                     <div>
-                      <ngx-json-viewer [json]="txfDetail.get(item.txn + '-transferAck')" [expanded]="false" style="height: 400px; overflow-y: auto"></ngx-json-viewer>
+                      <ngx-json-viewer [json]="txfDetail.get(item.txn + '-transferAck')" [expanded]="false" ></ngx-json-viewer>
                     </div>
+                  </nz-tab>
+                  <nz-tab nzTitle="Certificate (transferAck)" (nzSelect)="getBlockchainTxn(item.txn, 'transferAck')">
+                    <div style="white-space: pre-wrap; height: 250px; overflow-y: auto" *ngIf="txfDetail.get(item.txn + '-transferAck') !== undefined" [innerHTML]="txfDetail.get(item.txn + '-transferAck').transaction.message"></div>
                   </nz-tab>
                 </nz-tabset>
               </nz-card-tab>
-              {{item.display}}
+              <p style="font-style: italic;">{{item.display}}</p>
             </nz-card>
           </nz-timeline-item>
 
           <nz-timeline-item *ngIf="item.icon ==='normal'" nzPosition="left" [nzDot]="dotTemplateNormal">
-            <nz-card style="width: 50%;" [nzTitle]="item.date">
+            <nz-card style="width: 60%;" [nzTitle]="item.date">
               <nz-card-tab>
-                <nz-tabset nzSize="large" (nzSelectChange)="getCardContent($event, item)">
+                <nz-tabset nzSize="small" (nzSelectChange)="getCardContent($event, item)">
                   <nz-tab nzTitle="Description"></nz-tab>
                   <nz-tab nzTitle="Carrier"> </nz-tab>
                   <nz-tab *ngIf="item.hasContainers" nzTitle="Containers"> </nz-tab>
                 </nz-tabset>
               </nz-card-tab>
-              {{item.display}}
+              <p style="font-style: italic;">{{item.display}}</p>
             </nz-card>
           </nz-timeline-item>
  
           <nz-timeline-item *ngIf="item.icon ==='alert'" nzColor="red" nzPosition="left" [nzDot]="dotTemplateAlert">
-            <nz-card style="width: 50%;" [nzTitle]="item.date">
+            <nz-card style="width: 60%;" [nzTitle]="item.date">
               <nz-card-tab>
-                <nz-tabset nzSize="large">
+                <nz-tabset nzSize="small">
                   <nz-tab nzTitle="Violation">
                     <apx-chart
                         [series]="item.series"
@@ -88,10 +97,13 @@
                         [tooltip]="item.tooltip"
                       ></apx-chart>
                   </nz-tab>
-                  <nz-tab nzTitle="Blockchain Transaction" (nzSelect)="getBlockchainViolation(item)">
+                  <nz-tab nzTitle="Blockchain" (nzSelect)="getBlockchainViolation(item)">
                     <div>
                       <ngx-json-viewer [json]="txfDetail.get(item.txn + '-' + item.periods[0])" [expanded]="false" style="height: 400px; overflow-y: auto"></ngx-json-viewer>
                     </div>
+                    <nz-tab nzTitle="Certificate" (nzSelect)="getBlockchainViolation(item)">
+                      <div style="white-space: pre-wrap;height: 250px; overflow-y: auto" *ngIf="txfDetail.get(item.txn + '-' + item.periods[0]) !== undefined" [innerHTML]="txfDetail.get(item.txn + '-' + item.periods[0]).violations[0].transaction.message"></div>
+                    </nz-tab>
                   </nz-tab>
                 </nz-tabset>
                 </nz-card-tab>
@@ -101,31 +113,17 @@
       </nz-timeline>
 
       <ng-template #dotTemplateAlert>
-        <i nz-icon nzType="warning" style="font-size: 32px;"></i>
+        <i nz-icon nzType="warning" style="font-size: 24px;"></i>
       </ng-template>
       <ng-template #dotTemplateAlertStop>
         <i nz-icon nzType="check-circle" nzTheme="twotone"></i>
       </ng-template>
       <ng-template #dotTemplateNormal>
-        <i nz-icon nzType="down-circle" nzTheme="outline" style="font-size: 32px;"></i>
+        <i nz-icon nzType="down-circle" nzTheme="outline" style="font-size: 24px;"></i>
       </ng-template>
 
-      <ng-template #dotTemplateHome><i nz-icon nzType="home" nzTheme="twotone" style="font-size: 32px;"></i></ng-template>
-      <ng-template #dotTemplateTransfer><i nz-icon nzType="interaction" nzTheme="twotone" style="font-size: 32px;"></i></ng-template>
-      
-     
-
-      <ng-template let-item=item  #itemDisplay>
-        <nz-card style="width: 100%;" [nzTitle]="item.date" #card>
-          <nz-card-tab>
-            <nz-tabset nzSize="large">
-              <nz-tab nzTitle="Description"></nz-tab>
-              <nz-tab nzTitle="Carrier"></nz-tab>
-            </nz-tabset>
-          </nz-card-tab>
-           {{item.event}}
-        </nz-card>
-       </ng-template>
+      <ng-template #dotTemplateHome><i nz-icon nzType="home" nzTheme="twotone" style="font-size: 24px;"></i></ng-template>
+      <ng-template #dotTemplateTransfer><i nz-icon nzType="interaction" nzTheme="twotone" style="font-size: 24px;"></i></ng-template>
     </div>
   </div>
    

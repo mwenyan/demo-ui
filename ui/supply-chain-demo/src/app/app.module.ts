@@ -33,14 +33,18 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
+import { MapComponent } from './map/map.component';
+import { MapService } from './map/_services/map-service.service';
 
-const extraModules = environment.mockApi ? [MockModule] : [];
+
+//const extraModules = environment.mockApi ? [MockModule] : [];
 
 @NgModule({
   declarations: [
     AppComponent,
     SenderComponent,
     TimelineComponent,
+    MapComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,7 +52,7 @@ const extraModules = environment.mockApi ? [MockModule] : [];
     BrowserAnimationsModule,
     MaterialDesignModule,
     HttpClientModule,
-    ...extraModules,
+  //  ...extraModules,
     FormsModule,
     NzTimelineModule,
     NzIconModule,
@@ -61,7 +65,7 @@ const extraModules = environment.mockApi ? [MockModule] : [];
     NzTabsModule,
     NzSpinModule,
   ],
-  providers: [BlockchainService, { provide: NZ_I18N, useValue: en_US }],
+  providers: [BlockchainService, MapService, { provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

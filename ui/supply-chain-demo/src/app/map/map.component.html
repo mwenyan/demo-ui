@@ -1,0 +1,25 @@
+
+<div style="height: 100%; width: 100%;">
+    <div style="height: 10%; padding:20px; margin:20px">
+        <form nz-form [nzLayout]="'inline'" [formGroup]="getTrackingInfoForm" (ngSubmit)="getTrackingInfo()">
+        <nz-form-item>
+            <nz-form-control nzErrorTip="Please input package tracking number!">
+                <input size="50" formControlName="trackingId" nz-input placeholder="tracking number" />
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-control>
+            <nz-form-control>
+                <button nz-button nzType="primary" [disabled]="!getTrackingInfoForm.valid">Track Package</button>
+            </nz-form-control>
+            </nz-form-control>
+        </nz-form-item>
+        </form>
+        <br><p style="color:red">{{dataStatus}}</p>
+    </div>
+    <div class="map-container">
+        <div class="map-frame">
+            <div id="map"></div>
+        </div>
+    </div>
+</div>

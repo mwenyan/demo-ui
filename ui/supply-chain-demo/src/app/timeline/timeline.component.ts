@@ -133,7 +133,7 @@ export class TimelineComponent implements OnInit, AfterViewInit{
                               title: { text: 'Temperature Changes'},
                               series: [{name: '', data: [{}]}],
                               xaxis: {type: 'datetime'},
-                              yaxis: {show: true, labels: {show: true}},
+                              yaxis: { show: true, labels: {show: true}},
                               options: { bar: {horizontal: true, barHeight: '50%'}},
                               tooltip: {
                                 custom: ( { series, seriesIndex, dataPointIndex, w }: any) => {
@@ -171,10 +171,11 @@ export class TimelineComponent implements OnInit, AfterViewInit{
               violationPeriods.push(m.periodStart);
             }
 
-            const s = {x: 'status',
+            const s = {x: m.minValue + ':' + m.maxValue,
                        y: [new Date(m.periodStart).getTime(), new Date(m.periodEnd).getTime()],
                         fillColor: color
                       };
+
             violation.series[0].data.push(s);
             name = name + m.minValue + ':' + m.maxValue + ',';
           }
@@ -201,10 +202,12 @@ export class TimelineComponent implements OnInit, AfterViewInit{
     if (Boolean(txn)) {
       return txn;
     } else {
+      const tval = {transaction: ''};
       this.backendService.getBlockchainTxn(uid, event).subscribe(
         (val) => {
-          this.txfDetail.set(uid + '-' + event, val);
-          return val;
+          tval.transaction = val;
+          this.txfDetail.set(uid + '-' + event, tval);
+          return tval;
         },
         response => {
           console.log('error =', response);
@@ -261,6 +264,10 @@ export class TimelineComponent implements OnInit, AfterViewInit{
       item.display = '';
     }
 
+  }
+
+  parseCertificate(message: string): any {
+    const cert = {};
   }
 }
 
